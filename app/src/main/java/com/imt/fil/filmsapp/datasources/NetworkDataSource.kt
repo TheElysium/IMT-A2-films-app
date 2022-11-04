@@ -44,4 +44,22 @@ class NetworkDataSource {
             failure()
         }
     }
+
+    @WorkerThread
+    suspend fun getMoviesByName(name: String, success: (movies: List<Movie>) -> Unit, failure: () -> Unit) {
+        try {
+            val response = ApiClient.movieService.getMovieByName(name)
+
+            if (response.isSuccessful && response.body() != null) {
+                val content = response.body()
+                content?.let {
+                    success(moviesListDtoToMoviesList(it))
+                }
+            } else
+                failure()
+        } catch (e: Exception) {
+            Log.d("NetworkDataSource", e.toString())
+            failure()
+        }
+    }
 }
