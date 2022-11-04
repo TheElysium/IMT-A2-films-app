@@ -24,9 +24,13 @@ class SearchListAdapter(private val onClick: (Movie) -> Unit) :
         }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleSearch: TextView
+        val ratingSearch: TextView
+        val backdropSearch: ImageView
         init {
             with(view) {
                 titleSearch = findViewById(R.id.titleSearch)
+                ratingSearch = findViewById(R.id.ratingSearch)
+                backdropSearch = findViewById(R.id.backdropSearch)
                 setOnClickListener{
                     onClick(dataSet[adapterPosition])
                 }
@@ -40,6 +44,12 @@ class SearchListAdapter(private val onClick: (Movie) -> Unit) :
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.titleSearch.text = dataSet[position].title
+        holder.ratingSearch.text = buildString {
+            append(dataSet[position].averageVote.toString())
+            append("/10")
+        }
+        holder.backdropSearch.load("https://image.tmdb.org/t/p/original/${dataSet[position].backdropUrl}")
+
     }
     override fun getItemCount(): Int =
         dataSet.size
