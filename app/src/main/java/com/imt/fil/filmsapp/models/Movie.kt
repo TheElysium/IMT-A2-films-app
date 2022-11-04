@@ -19,6 +19,8 @@ data class Movie @Ignore constructor(
     val overview: String? = null,
     val releaseDate: LocalDate? = null,
     @Ignore
+    val genres_id: List<Int>? = null,
+    @Ignore
     var favorite: Boolean = false,
     @Ignore
     val cast: List<CastMember> = emptyList(),
@@ -32,7 +34,7 @@ data class Movie @Ignore constructor(
         votesNumber: Int,
         overview: String?,
         releaseDate: LocalDate?,
-    ) : this(
+        ) : this(
         id,
         posterUrl,
         backdropUrl,
@@ -41,6 +43,7 @@ data class Movie @Ignore constructor(
         votesNumber,
         overview,
         releaseDate,
+        emptyList(),
         false,
         emptyList()
     )

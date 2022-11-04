@@ -1,7 +1,10 @@
 package com.imt.fil.filmsapp.datasources
 
+import com.imt.fil.filmsapp.datasources.dto.GenreDto
+import com.imt.fil.filmsapp.datasources.dto.GenresListDto
 import com.imt.fil.filmsapp.datasources.dto.MovieDto
 import com.imt.fil.filmsapp.datasources.dto.MoviesListDto
+import com.imt.fil.filmsapp.models.Genre
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,4 +18,6 @@ interface MovieService {
     fun getLatestMovies(): Call<MoviesListDto>
     @GET("search/movie")
     suspend fun getMovieByName(@Query("query") query: String): Response<MoviesListDto>
+    @GET("genre/movie/list")
+    suspend fun getGenres(): Response<GenresListDto>
 }

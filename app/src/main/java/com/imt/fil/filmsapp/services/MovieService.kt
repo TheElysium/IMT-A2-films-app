@@ -4,6 +4,7 @@ import android.content.Context
 import com.imt.fil.filmsapp.CustomApplication
 import com.imt.fil.filmsapp.datasources.NetworkDataSource
 import com.imt.fil.filmsapp.datasources.dao.MovieDao
+import com.imt.fil.filmsapp.models.Genre
 import com.imt.fil.filmsapp.models.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,16 @@ class MovieService(context: Context) {
                     movie.favorite = moviesDb.any { it.id == movie.id }
                 }
                 success(movies)
+            }, failure = {
+                failure()
+            })
+        }
+    }
+
+    fun getGenres(success: (movies: List<Genre>) -> Unit, failure: () -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            networkDataSource.getGenres( success = { genres ->
+                success(genres)
             }, failure = {
                 failure()
             })

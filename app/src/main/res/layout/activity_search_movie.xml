@@ -20,9 +20,19 @@
         android:id="@+id/searchList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:foregroundTint="#FFFFFF"
         android:paddingHorizontal="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterDroplist" />
+
+    <Spinner
+        android:id="@+id/filterDroplist"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search" />

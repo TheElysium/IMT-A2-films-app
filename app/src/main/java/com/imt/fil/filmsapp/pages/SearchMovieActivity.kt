@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.SearchView
+import android.view.View
+import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.imt.fil.filmsapp.R
+import com.imt.fil.filmsapp.models.Genre
 import com.imt.fil.filmsapp.models.Movie
 import com.imt.fil.filmsapp.services.MovieService
 
@@ -20,6 +20,7 @@ class SearchMovieActivity : AppCompatActivity() {
     private lateinit var movieService: MovieService
     private var savedMovies: List<Movie>? = null
     private lateinit var searchListAdapter: SearchListAdapter
+    private lateinit var customArrayAdapter: CustomArrayAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,20 +38,20 @@ class SearchMovieActivity : AppCompatActivity() {
 
         searchMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.d("searchMovie", newText) // REMOVE
                 movieService.getMoviesByName(newText, success = {
                     runOnUiThread {
                         searchListAdapter.dataSet = it
+                        searchListAdapter.initialDataSet = it
                     }
                 }, failure = {})
                 return false;
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("searchMovie", query) // REMOVE
                 movieService.getMoviesByName(query, success = {
                     runOnUiThread {
                         searchListAdapter.dataSet = it
+                        searchListAdapter.initialDataSet = it
                     }
                 }, failure = {})
                 return false;
@@ -61,6 +62,35 @@ class SearchMovieActivity : AppCompatActivity() {
         searchMoviesList.adapter = searchListAdapter
         searchMoviesList.layoutManager = LinearLayoutManager(this)
 
+        val filterDropdown: Spinner = findViewById(R.id.filterDroplist)
+
+        customArrayAdapter =
+            CustomArrayAdapter(this, android.R.layout.simple_spinner_item, arrayListOf())
+
+        movieService.getGenres(success = {
+            runOnUiThread {
+                customArrayAdapter.addAll(it)
+            }
+        }, failure = {})
+
+        filterDropdown.adapter = customArrayAdapter
+
+        filterDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val filterId: Long = customArrayAdapter.getItemId(position)
+                var movies = searchListAdapter.initialDataSet
+                movies = movies.filter { m -> m.genres_id?.contains(filterId.toInt()) ?: false }
+                searchListAdapter.dataSet = movies
+            }
+        }
     }
 
     private fun navigateToDetail(movie: Movie) {

@@ -16,6 +16,7 @@ import com.imt.fil.filmsapp.models.Movie
 
 class SearchListAdapter(private val onClick: (Movie) -> Unit) :
     RecyclerView.Adapter<SearchListAdapter.ViewHolder>() {
+    var initialDataSet: List<Movie> = emptyList();
     var dataSet: List<Movie> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
@@ -53,4 +54,5 @@ class SearchListAdapter(private val onClick: (Movie) -> Unit) :
     }
     override fun getItemCount(): Int =
         dataSet.size
+
 }
